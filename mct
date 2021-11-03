@@ -101,7 +101,7 @@ else
           mkdir /$cname
           cd /$cname
           wget https://github.com/ClickNinYT/mct/releases/download/cn/linuxmint.sfs
-          unquashfs linuxmint.sfs
+          unsquashfs linuxmint.sfs
           rm linuxmint.sfs
           mv squashfs-root $cname
           echo "[mct] Creating Container..."
@@ -143,7 +143,7 @@ else
           mkdir /$cname
           cd /$cname
           wget https://github.com/ClickNinYT/mct/releases/download/cn/gentoo.sfs
-          unquashfs gentoo.sfs
+          unsquashfs gentoo.sfs
           rm gentoo.sfs
           mv squashfs-root $cname
           echo "[mct] Creating Container..."
@@ -218,7 +218,7 @@ else
           mkdir /$cname
           cd /$cname
           wget https://github.com/ClickNinYT/mct/releases/download/cn/fedora.sfs
-          unquashfs fedora.sfs
+          unsquashfs fedora.sfs
           rm fedora.sfs
           mv squashfs-root $cname
           echo "[mct] Creating Container..."
@@ -257,7 +257,7 @@ else
           mkdir /$cname
           cd /$cname
           wget https://github.com/ClickNinYT/mct/releases/download/cn/arch.sfs
-          unquashfs arch.sfs
+          unsquashfs arch.sfs
           rm arch.sfs
           mv squashfs-root $cname
           echo "[mct] Creating Container..."
@@ -282,7 +282,7 @@ else
           mkdir /$cname
           cd /$cname
           wget https://github.com/ClickNinYT/mct/releases/download/cn/manjaro.sfs
-          unquashfs manjaro.sfs
+          unsquashfs manjaro.sfs
           rm manjaro.sfs
           mv squashfs-root $cname
           echo "[mct] Creating Container..."
@@ -307,7 +307,7 @@ else
           mkdir /$cname
           cd /$cname
           wget https://github.com/ClickNinYT/mct/releases/download/cn/endeavouros.sfs
-          unquashfs endeavouros.sfs
+          unsquashfs endeavouros.sfs
           rm endeavouros.sfs
           mv squashfs-root $cname
           echo "[mct] Creating Container..."
@@ -332,7 +332,7 @@ else
           mkdir /$cname
           cd /$cname
           wget https://github.com/ClickNinYT/mct/releases/download/cn/on1x.sfs
-          unquashfs on1x.sfs
+          unsquashfs on1x.sfs
           rm on1x.sfs
           mv squashfs-root $cname
           echo "[mct] Creating Container..."
