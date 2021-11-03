@@ -1,0 +1,355 @@
+#!/bin/bash
+
+#MassOS Container Tool (mct) Binary Source
+
+if [ $EUID != 0 ]; then
+  echo "[mct] MCT must be run as root!" >&2
+  echo "[mct] Error Code: MCT_NOT_ROOT"
+  exit 1
+fi
+if [ -z "$1" ];
+   then echo "[mct] No Arguments Given! Error Code: MCT_NO_ARG_GIVEN"
+   exit 1
+else
+   if [ $1 == "help" ];
+      then echo "[mct] MassOS Container Tool"
+      echo "[mct] Commands List"
+      echo ""
+      echo "[mct] help: Display all commands and functions"
+      echo "[mct] launch: Launch an existing container"
+      echo "[mct] create: Create a container"
+      echo "[mct] remove: Remove a container"
+      echo "[mct] avail: List all available distribution"
+      echo "[mct] about: Display MassOS Container Tool version and information"
+      exit
+   elif [ $1 == "about" ];
+      then echo "[mct] MassOS Container Tool"
+      echo "[mct] Version 1.0.1 - Updated Date: 2/11/2021"
+      echo "[mct] MCT is a native container tool for MassOS operating-system"
+      echo "[mct] MCT support almost all major Linux distribution"
+      echo "[mct] MCT is heavily based on Systemd and Chroot"
+      exit
+   elif [ $1 == "avail" ];
+      then echo "[mct] Available Distribution:"
+      echo "[mct] ubuntu, linuxmint, fedora, gentoo, arch, manjaro, endeavouros, massos, on1x"
+      exit
+   elif [ $1 == "launch" ];
+      then echo "[mct] Enter in the container name you want to boot"
+      read -p "Container Name: " bname
+      echo "[mct] Booting Container $bname ..."
+      echo "[mct] Login using the user you has created when create the container"
+      sudo systemd-nspawn -b -D /var/lib/machines/$bname
+      echo "[mct] Container exited!"
+      exit
+   elif [ $1 == "remove" ];
+      then echo "[mct] Enter in the name of container you want to remove"
+      read -p "[mct] Container Name: " rname
+      echo "[mct] Removing Container $rname ..."
+      sudo rm -drf /var/lib/machines/$rname
+      echo "[mct] Container $rname has been removed!"
+      exit
+   elif [ $1 == "create" ];
+      then echo "[mct] Enter in the distribution you want to create"
+      read -p "[mct] Distribution: " distro
+      if [ $distro == "ubuntu" ];
+          then echo "[mct] Ubuntu Delected!"
+          echo "[mct] Enter in the name of the container you want to create"
+          read -p "[mct] Container Name: " cname
+          echo "[mct] Creating container $cname with Ubuntu..."
+          echo "[mct] Downloading Ubuntu Root File System..."
+          mkdir /$cname
+          cd /$cname
+          wget http://cdimage.ubuntu.com/ubuntu-base/releases/20.04/release/ubuntu-base-20.04.1-base-amd64.tar.gz
+          tar -xf ubuntu-base-20.04.1-base-amd64.tar.gz
+          rm ubuntu-base-20.04.1-base-amd64.tar.gz
+          cd ..
+          echo "[mct] Creating Container..."
+          cp -r $cname /var/lib/machines
+          echo "[mct] Right Before Container Setup..."
+          rm -drf $cname
+          echo "[mct] Setting the Container up..."
+          cd /var/lib/machines
+          systemd-nspawn -D ./$cname \
+          apt update
+          systemd-nspawn -D ./$cname \
+          apt install systemd-container systemd -y
+          systemd-nspawn -D ./$cname \
+          echo "[mct] Enter in the password for ROOT user"
+          systemd-nspawn -D ./$cname \
+          passwd
+          echo "[mct] Do you want to create a regular user?"
+          read -p "[mct] Yes/No (case-sentisive): " ans1
+          if [ $ans1 == "Yes" ];
+             then echo "[mct] Enter in the username you want to create"
+             read -p "[mct] Username: " usrname
+             systemd-nspawn -D ./$cname \
+             adduser $usrname
+             echo "[mct] Container $cname has been created!"
+             echo "[mct] Use launch command to boot the container up!"
+             exit
+          else
+             echo "[mct] Container $cname has been created!"
+             echo "[mct] Use launch command to boot the container up!"
+             exit
+          fi
+      elif [ $distro == "linuxmint" ];
+          then echo "[mct] Linux Mint Delected!"
+          echo "[mct] Enter in the name of the container you want to create"
+          read -p "[mct] Container Name: " cname
+          echo "[mct] Creating container $cname with Linux Mint"
+          echo "[mct] Downloading Linux Mint Root File System..."
+          mkdir /$cname
+          cd /$cname
+          wget https://github.com/ClickNinYT/mct/releases/download/cn/linuxmint.sfs
+          unquashfs linuxmint.sfs
+          rm linuxmint.sfs
+          mv squashfs-root $cname
+          echo "[mct] Creating Container..."
+          cp -r $cname /var/lib/machines
+          echo "[mct] Right Before Container Setup..."
+          cd ..
+          rm -drf $cname
+          echo "[mct] Setting the Container up..."
+          cd /var/lib/machines
+          systemd-nspawn -D ./$cname \
+          apt update
+          systemd-nspawn -D ./$cname \
+          apt install systemd-container systemd -y
+          systemd-nspawn -D ./$cname \
+          echo "[mct] Enter in the password for ROOT user"
+          systemd-nspawn -D ./$cname \
+          passwd
+          echo "[mct] Do you want to create a regular user?"
+          read -p "[mct] Yes/No (case-sentisive): " ans1
+          if [ $ans1 == "Yes" ];
+             then echo "[mct] Enter in the username you want to create"
+             read -p "[mct] Username: " usrname
+             systemd-nspawn -D ./$cname \
+             adduser $usrname
+             echo "[mct] Container $cname has been created!"
+             echo "[mct] Use launch command to boot the container up!"
+             exit
+          else
+             echo "[mct] Container $cname has been created!"
+             echo "[mct] Use launch command to boot the container up!"
+             exit
+          fi
+      elif [ $distro == "gentoo" ];
+          then echo "[mct] Gentoo Linux Delected!"
+          echo "[mct] Enter in the name of the container you want to create"
+          read -p "[mct] Container Name: " cname
+          echo "[mct] Creating container $cname with Gentoo Linux..."
+          echo "[mct] Downloading Gentoo Linux Root File System..."
+          mkdir /$cname
+          cd /$cname
+          wget https://github.com/ClickNinYT/mct/releases/download/cn/gentoo.sfs
+          unquashfs gentoo.sfs
+          rm gentoo.sfs
+          mv squashfs-root $cname
+          echo "[mct] Creating Container..."
+          cp -r $cname /var/lib/machines
+          echo "[mct] Right Before Container Setup..."
+          cd ..
+          rm -drf $cname
+          echo "[mct] Setting the Container up..."
+          cd /var/lib/machines
+          echo "[mct] Setting up ROOT password..."
+          systemd-nspawn -D ./$cname \
+          passwd
+          echo "[mct] Do you want to create a regular user?"
+          read -p "[mct] Yes/No (case-sentisive): " ans1
+          if [ $ans1 == "Yes" ];
+             then echo "[mct] Enter in the username you want to create"
+             read -p "[mct] Username: " usrname
+             systemd-nspawn -D ./$cname \
+             useradd -m -G users,wheel,audio -s /bin/bash $usrname
+             systemd-nspawn -D ./$cname \
+             passwd $usrname
+             echo "[mct] Container $cname has been created!"
+             echo "[mct] Use launch command to boot the container up!"
+             exit
+          else
+             echo "[mct] Container $cname has been created!"
+             echo "[mct] Use launch command to boot the container up!"
+             exit
+          fi
+      elif [ $distro == "massos" ];
+          then echo "[mct] MassOS Delected!"
+          echo "[mct] Enter in the name of the container you want to create"
+          read -p "[mct] Container Name: " cname
+          echo "[mct] Creating container $cname with MassOS..."
+          echo "[mct] Downloading MassOS Root File System..."
+          mkdir /$cname
+          cd /$cname
+          ver="$(curl -s https://raw.githubusercontent.com/TheSonicMaster/MassOS/main/utils/massos-release)"
+          url="https://github.com/TheSonicMaster/MassOS/releases/download/v$ver/massos-$ver-rootfs-x86_64.tar.xz"
+          wget url
+          tar -xf massos-$ver-rootfs-x86_64.tar.xz
+          rm massos-$ver-rootfs-x86_64.tar.xz
+          cd ..
+          echo "[mct] Creating Container..."
+          cp -r $cname /var/lib/machines
+          echo "[mct] Right Before Container Setup..."
+          rm -drf $cname
+          echo "[mct] Setting the Container up..."
+          cd /var/lib/machines
+          echo "[mct] Setting up ROOT password..."
+          systemd-nspawn -D ./$cname \
+          passwd
+          echo "[mct] Do you want to create a regular user?"
+          read -p "[mct] Yes/No (case-sentisive): " ans1
+          if [ $ans1 == "Yes" ];
+             then systemd-nspawn -D ./$cname \
+             adduser
+             echo "[mct] Container $cname has been created!"
+             echo "[mct] Use launch command to boot the container up!"
+             exit
+          else
+             echo "[mct] Container $cname has been created!"
+             echo "[mct] Use launch command to boot the container up!"
+             exit
+          fi
+      elif [ $distro == "fedora" ];
+          then echo "[mct] Fedora Delected!"
+          echo "[mct] Enter in the name of the container you want to create"
+          read -p "[mct] Container Name: " cname
+          echo "[mct] Creating container $cname with Fedora..."
+          echo "[mct] Downloading Fedora Root File System..."
+          mkdir /$cname
+          cd /$cname
+          wget https://github.com/ClickNinYT/mct/releases/download/cn/fedora.sfs
+          unquashfs fedora.sfs
+          rm fedora.sfs
+          mv squashfs-root $cname
+          echo "[mct] Creating Container..."
+          cp -r $cname /var/lib/machines
+          echo "[mct] Right Before Container Setup..."
+          cd ..
+          rm -drf $cname
+          echo "[mct] Setting the Container up..."
+          cd /var/lib/machines
+          echo "[mct] Setting up ROOT password..."
+          systemd-nspawn -D ./$cname \
+          passwd
+          echo "[mct] Do you want to create a regular user?"
+          read -p "[mct] Yes/No (case-sentisive): " ans1
+          if [ $ans1 == "Yes" ];
+             then echo "[mct] Enter in the username you want to create"
+             read -p "[mct] Username: " usrname
+             systemd-nspawn -D ./$cname \
+             useradd -m $usrname
+             systemd-nspawn -D ./$cname \
+             passwd $usrname
+             echo "[mct] Container $cname has been created!"
+             echo "[mct] Use launch command to boot the container up!"
+             exit
+          else
+             echo "[mct] Container $cname has been created!"
+             echo "[mct] Use launch command to boot the container up!"
+             exit
+          fi
+      elif [ $distro == "arch" ];
+          then echo "[mct] Arch Linux Delected!"
+          echo "[mct] Enter in the name of the container you want to create"
+          read -p "[mct] Container Name: " cname
+          echo "[mct] Creating container $cname with Arch Linux..."
+          echo "[mct] Downloading Arch Linux Root File System..."
+          mkdir /$cname
+          cd /$cname
+          wget https://github.com/ClickNinYT/mct/releases/download/cn/arch.sfs
+          unquashfs arch.sfs
+          rm arch.sfs
+          mv squashfs-root $cname
+          echo "[mct] Creating Container..."
+          cp -r $cname /var/lib/machines
+          echo "[mct] Right Before Container Setup..."
+          cd ..
+          rm -drf $cname
+          echo "[mct] Setting the Container up..."
+          cd /var/lib/machines
+          echo "[mct] Setting up ROOT password..."
+          systemd-nspawn -D ./$cname \
+          passwd
+          echo "[mct] Container $cname has been created!"
+          echo "[mct] Use launch command to boot the container up!"
+          exit
+      elif [ $distro == "manjaro" ];
+          then echo "[mct] Manjaro Delected!"
+          echo "[mct] Enter in the name of the container you want to create"
+          read -p "[mct] Container Name: " cname
+          echo "[mct] Creating container $cname with Manjaro..."
+          echo "[mct] Downloading Manjaro Root File System..."
+          mkdir /$cname
+          cd /$cname
+          wget https://github.com/ClickNinYT/mct/releases/download/cn/manjaro.sfs
+          unquashfs manjaro.sfs
+          rm manjaro.sfs
+          mv squashfs-root $cname
+          echo "[mct] Creating Container..."
+          cp -r $cname /var/lib/machines
+          echo "[mct] Right Before Container Setup..."
+          cd ..
+          rm -drf $cname
+          echo "[mct] Setting the Container up..."
+          cd /var/lib/machines
+          echo "[mct] Setting up ROOT password..."
+          systemd-nspawn -D ./$cname \
+          passwd
+          echo "[mct] Container $cname has been created!"
+          echo "[mct] Use launch command to boot the container up!"
+          exit
+      elif [ $distro == "endeavouros" ];
+          then echo "[mct] Endeavouros Delected!"
+          echo "[mct] Enter in the name of the container you want to create"
+          read -p "[mct] Container Name: " cname
+          echo "[mct] Creating container $cname with Endeavouros..."
+          echo "[mct] Downloading Endeavouros Root File System..."
+          mkdir /$cname
+          cd /$cname
+          wget https://github.com/ClickNinYT/mct/releases/download/cn/endeavouros.sfs
+          unquashfs endeavouros.sfs
+          rm endeavouros.sfs
+          mv squashfs-root $cname
+          echo "[mct] Creating Container..."
+          cp -r $cname /var/lib/machines
+          echo "[mct] Right Before Container Setup..."
+          cd ..
+          rm -drf $cname
+          echo "[mct] Setting the Container up..."
+          cd /var/lib/machines
+          echo "[mct] Setting up ROOT password..."
+          systemd-nspawn -D ./$cname \
+          passwd
+          echo "[mct] Container $cname has been created!"
+          echo "[mct] Use launch command to boot the container up!"
+          exit
+      elif [ $distro == "on1x" ];
+          then echo "[mct] Odysseyn1x Delected!"
+          echo "[mct] Enter in the name of the container you want to create"
+          read -p "[mct] Container Name: " cname
+          echo "[mct] Creating container $cname with Odysseyn1x..."
+          echo "[mct] Downloading Odysseyn1x Root File System..."
+          mkdir /$cname
+          cd /$cname
+          wget https://github.com/ClickNinYT/mct/releases/download/cn/on1x.sfs
+          unquashfs on1x.sfs
+          rm on1x.sfs
+          mv squashfs-root $cname
+          echo "[mct] Creating Container..."
+          cp -r $cname /var/lib/machines
+          echo "[mct] Cleaning up..."
+          cd ..
+          rm -drf $cname
+          echo "[mct] Container $cname has been created!"
+          echo "[mct] Use launch command to boot the container up!"
+          exit
+      else
+          echo "[mct] $distro is currently not available!"
+          echo "[mct] Error Code: MCT_NOT_AVAIL_DISTRO"
+          exit 1
+      fi
+   else
+      echo "[mct] Unknown Arguments Given! Error Code: MCT_UNK_ARG_GIVEN"
+      exit
+   fi
+fi
