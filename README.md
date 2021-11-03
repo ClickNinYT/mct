@@ -12,3 +12,6 @@ sudo cp mct /usr/bin
 rm mct
 ```
 After that, run `sudo mct about` to confirm that MCT is installed!
+
+## Usage
+All commands and function can be found by running `sudo mct help`. A list of available Linux distribution for creating a container can be found by running `sudo mct avail`. For example, if you want to create a Ubuntu container, run `sudo mct create` and enter in `ubuntu`. Simple.
