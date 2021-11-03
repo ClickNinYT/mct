@@ -24,7 +24,7 @@ else
       exit
    elif [ $1 == "about" ];
       then echo "[mct] MassOS Container Tool"
-      echo "[mct] Version 1.0.1 - Updated Date: 2/11/2021"
+      echo "[mct] Version 1.0.2 - Updated Date: 3/11/2021"
       echo "[mct] MCT is a native container tool for MassOS operating-system"
       echo "[mct] MCT support almost all major Linux distribution"
       echo "[mct] MCT is heavily based on Systemd and Chroot"
