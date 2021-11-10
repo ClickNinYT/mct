@@ -26,7 +26,7 @@ After that, run `sudo mct about` to confirm that MCT is installed!
 Using MCT is fairy simple, you can get a list of available commands using `sudo mct help`, or get a list of available Distribution using `sudo mct avail`. For example, if you want to create a container named "MyContainer" with Ubuntu, just run `sudo mct create ubuntu MyContainer` and wait patiently. After that, everytime you want to boot the container up, just use `sudo mct launch MyContainer`.
 
 ## What is supported?
-Currently, MCT is fully supported. However, GUI Apps will not working for now. If you want to run GUI Apps, refer to Arch Wiki for more information. [Arch Wiki - X11 Forwarding](https://wiki.archlinux.org/title/systemd-nspawn#Use_an_X_environment)
+Currently, MCT is fully supported. However, GUI Apps will not working for now. If you want to run GUI Apps, refer to Arch Wiki for more information. [Arch Wiki - X11 Forwarding](https://wiki.archlinux.org/title/systemd-nspawn#Use_an_X_environment)\
 Audio and GPU Accerelator is currently not officially supported by MCT.
 
 ## About NG Project
