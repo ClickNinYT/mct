@@ -361,7 +361,7 @@ operation_create() {
     cd "$tmpdir/$cname"
     ver="$(curl -s https://raw.githubusercontent.com/TheSonicMaster/MassOS/main/utils/massos-release)"
     url="https://github.com/TheSonicMaster/MassOS/releases/download/v$ver/massos-$ver-rootfs-x86_64.tar.xz"
-    wget url
+    wget "$url"
     tar -xf massos-$ver-rootfs-x86_64.tar.xz
     rm massos-$ver-rootfs-x86_64.tar.xz
     cd ..
